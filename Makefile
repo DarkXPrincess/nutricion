@@ -1,26 +1,18 @@
-# Variables
-CXX = g++                   # Especifica el compilador
-CXXFLAGS = -Wall -std=c++11  -I/usr/include/nlohmann # Opciones del compilador: -Wall para las advertencias y -std=c++11 para usar C++11
-LIBS = -lcurl                # Especifica que se debe enlazar la biblioteca curl
+CXX = g++
+CXXFLAGS = -Wall -std=c++17 -I/usr/include/nlohmann
+LDFLAGS = -lcurl
 
-
-# Nombre del ejecutable
+SRCS = main.cpp api.cpp json_handler.cpp nutrition_displayer.cpp
+OBJS = $(SRCS:.cpp=.o)
 TARGET = programa
 
-# Archivos fuente
-SRCS = main.cpp
+all: $(TARGET)
 
-# Archivos objeto (se generan automáticamente a partir de SRCS)
-OBJS = $(SRCS:.cpp=.o)
-
-# Regla principal: compilar todo
 $(TARGET): $(OBJS)
-	$(CXX) -o $(TARGET) $(OBJS) $(LIBS)   # Enlaza los objetos y la biblioteca curl
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
-# Regla para compilar archivos .cpp a archivos .o
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-# Limpieza de archivos generados (.o y el ejecutable)
 clean:
 	rm -f $(OBJS) $(TARGET)

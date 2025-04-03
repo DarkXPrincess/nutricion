@@ -1,0 +1,32 @@
+cmake_minimum_required(VERSION 3.10)
+project(nutricion)
+
+set(CMAKE_CXX_STANDARD 17)
+
+# Buscar dependencias
+find_package(CURL REQUIRED)
+
+# Configurar nlohmann/json
+include(FetchContent)
+FetchContent_Declare(
+    nlohmann_json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.2
+)
+FetchContent_MakeAvailable(nlohmann_json)
+
+# Archivos fuente
+set(SOURCES
+    src/main.cpp
+    src/api.cpp
+    src/json_handler.cpp
+    src/nutricion_usuario.cpp
+)
+
+# Ejecutable
+add_executable(nutricion ${SOURCES})
+target_include_directories(nutricion PRIVATE include)
+target_link_libraries(nutricion PRIVATE 
+    CURL::libcurl 
+    nlohmann_json::nlohmann_json
+)
